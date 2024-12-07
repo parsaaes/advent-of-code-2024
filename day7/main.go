@@ -12,12 +12,7 @@ import (
 func main() {
 	lines := input.Read()
 
-	part1(lines)
-	part2(lines)
-}
-
-func part1(lines []string) {
-	total := 0
+	parsedLines := map[int][]int{}
 
 	for _, line := range lines {
 		parts := strings.Split(line, ":")
@@ -32,6 +27,17 @@ func part1(lines []string) {
 			nums[i], _ = strconv.Atoi(s)
 		}
 
+		parsedLines[testResult] = nums
+	}
+
+	part1(parsedLines)
+	part2(parsedLines)
+}
+
+func part1(parsedLines map[int][]int) {
+	total := 0
+
+	for testResult, nums := range parsedLines {
 		operatorsLen := len(nums) - 1
 
 		operatorCombinations := int(math.Pow(2, float64(operatorsLen)))
@@ -65,22 +71,10 @@ func part1(lines []string) {
 	fmt.Println(total)
 }
 
-func part2(lines []string) {
+func part2(parsedLines map[int][]int) {
 	total := 0
 
-	for _, line := range lines {
-		parts := strings.Split(line, ":")
-
-		testResult, _ := strconv.Atoi(parts[0])
-
-		numStrs := strings.Fields(parts[1])
-
-		nums := make([]int, len(numStrs))
-
-		for i, s := range numStrs {
-			nums[i], _ = strconv.Atoi(s)
-		}
-
+	for testResult, nums := range parsedLines {
 		operatorLen := len(nums) - 1
 
 		operatorCombinations := int(math.Pow(3, float64(operatorLen)))

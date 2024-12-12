@@ -126,11 +126,18 @@ func main() {
 			source := grid[i][j]
 
 			/* border grids works like this:
-			          .-.-.
-			AA        |A|A|
-			AA  =>    .-.-.
-					  |A|A|
-				      .-.-.
+
+			AA
+			AA
+
+			=>
+
+			.-.-.
+			|A|A|
+			.-.-.
+			|A|A|
+			.-.-.
+
 			*/
 
 			r := region{

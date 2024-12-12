@@ -71,16 +71,14 @@ func (r *region) traverseSideVertically(pnt point, fenceType byte) {
 }
 
 func (r *region) addFence(pnt, dir point) {
-	switch dir {
-	case point{1, 0}:
-		r.borderGrid[pnt.i+1][pnt.j] = '^'
-	case point{-1, 0}:
-		r.borderGrid[pnt.i-1][pnt.j] = 'v'
-	case point{0, 1}:
-		r.borderGrid[pnt.i][pnt.j+1] = '<'
-	case point{0, -1}:
-		r.borderGrid[pnt.i][pnt.j-1] = '>'
+	fenceMap := map[point]byte{
+		point{1, 0}:  '^',
+		point{-1, 0}: 'v',
+		point{0, 1}:  '<',
+		point{0, -1}: '>',
 	}
+
+	r.borderGrid[pnt.i+dir.i][pnt.j+dir.j] = fenceMap[dir]
 }
 
 func (q *queue) push(c *cell) {

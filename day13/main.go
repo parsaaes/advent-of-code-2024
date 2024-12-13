@@ -55,45 +55,15 @@ func part1(clawMachines []clawMachine) {
 }
 
 func part2(clawMachines []clawMachine) {
-	/*
-		xA*a+xB*b=prizeX
-		yA*a+yB*b=prizeY
-	*/
-
-	var total int64
+	total := 0
 
 	for i := range clawMachines {
-		prizeX := clawMachines[i].prize.x + 10000000000000
-		prizeY := clawMachines[i].prize.y + 10000000000000
+		clawMachines[i].prize.x += +10000000000000
+		clawMachines[i].prize.y += +10000000000000
 
-		determinant := clawMachines[i].a.x*clawMachines[i].b.y - clawMachines[i].b.x*clawMachines[i].a.y
+		a, b := solveByCramersRule(clawMachines[i])
 
-		// zero or infinite results
-		if determinant == 0 {
-			if prizeX%clawMachines[i].b.x == 0 {
-				numberOfB := prizeX / clawMachines[i].b.x
-
-				if prizeY == numberOfB*clawMachines[i].b.y {
-					total += int64(numberOfB)
-				}
-			} else if prizeX%clawMachines[i].a.x == 0 {
-				numberOfA := prizeX / clawMachines[i].a.x
-
-				if prizeY == numberOfA*clawMachines[i].a.y {
-					total += int64(numberOfA * 3)
-				}
-			}
-
-			continue
-		}
-
-		a := float64(prizeX*clawMachines[i].b.y-clawMachines[i].b.x*prizeY) / float64(determinant)
-		b := float64(clawMachines[i].a.x*prizeY-prizeX*clawMachines[i].a.y) / float64(determinant)
-
-		// moves should be integers
-		if a == float64(int64(a)) && b == float64(int64(b)) {
-			total += 3*int64(a) + int64(b)
-		}
+		total += 3*(a) + b
 	}
 
 	fmt.Println(total)
@@ -144,6 +114,47 @@ func solveGreedy(clm clawMachine) (int, int) {
 				return aResult, bResult
 			}
 		}
+	}
+
+	return 0, 0
+}
+
+func solveByCramersRule(clm clawMachine) (int, int) {
+	/*
+		xA*a+xB*b=prizeX
+		yA*a+yB*b=prizeY
+	*/
+
+	prizeX := clm.prize.x
+	prizeY := clm.prize.y
+
+	determinant := clm.a.x*clm.b.y - clm.b.x*clm.a.y
+
+	// zero or infinite results
+	if determinant == 0 {
+		if prizeX%clm.b.x == 0 {
+			numberOfB := prizeX / clm.b.x
+
+			if prizeY == numberOfB*clm.b.y {
+				return 0, numberOfB
+			}
+		} else if prizeX%clm.a.x == 0 {
+			numberOfA := prizeX / clm.a.x
+
+			if prizeY == numberOfA*clm.a.y {
+				return numberOfA, 0
+			}
+		}
+
+		return 0, 0
+	}
+
+	a := float64(prizeX*clm.b.y-clm.b.x*prizeY) / float64(determinant)
+	b := float64(clm.a.x*prizeY-prizeX*clm.a.y) / float64(determinant)
+
+	// moves should be integers
+	if a == float64(int64(a)) && b == float64(int64(b)) {
+		return int(a), int(b)
 	}
 
 	return 0, 0

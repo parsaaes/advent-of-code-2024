@@ -185,10 +185,10 @@ func main() {
 
 	goodSeats := map[point]struct{}{}
 
-	for _, end := range bestPathEnds {
+	for _, bestPathEnd := range bestPathEnds {
 		s := make(stack, 0)
 
-		s.push(end)
+		s.push(bestPathEnd)
 
 		for len(s) != 0 {
 			c := s.pop()
